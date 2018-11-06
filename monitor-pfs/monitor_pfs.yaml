@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: monitorpfs
+  namespace: kube-system
+spec:
+  template:
+    metadata:
+      labels:
+        name: monitorpfs
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: "linux"
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: monitor2
+          image: docker.io/shaharklein/nv_monitor_pfs:latest
+          imagePullPolicy: "Always"
+          securityContext:
+            runAsUser: 0
+            privileged: true
+
