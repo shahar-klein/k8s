@@ -1,0 +1,20 @@
+FROM ubuntu:18.04
+
+USER root
+
+# get a reasonable version of openvswitch
+RUN apt-get update
+RUN apt-get install -y iproute2 vim python 
+RUN apt-get update
+RUN apt -y install python-pip
+RUN pip install pyroute2
+
+COPY monitorPFs.py /root
+RUN chmod +x /root/monitorPFs.py
+
+
+LABEL io.k8s.display-name="nv monitor pfs" \
+      io.k8s.description="monitor pfs and set reps accordingly" 
+
+WORKDIR /root
+ENTRYPOINT /root/monitorPFs.py
