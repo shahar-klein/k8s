@@ -9,6 +9,15 @@ from threading import Thread
 import Queue
 from pyroute2 import IPDB
 from pyroute2 import IPRoute
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler('monitorPFs.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('[%(asctime)s]: %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 work_queue = Queue.Queue()
 ip = IPDB()
@@ -40,15 +49,17 @@ class PF:
 
     def setRepsState(self):
         for rep in self.reps:
-            print "Setting:", rep, self.state
+            #print "Setting:", rep, self.state
             if self.state == 1:
                 state='up'
             else:
                 state = 'down'
+	    logger.info('Setting: %s %s', rep, state)
             ipr.link('set', index=ipr.link_lookup(ifname=rep)[0], state=state)
 
 class MonitorPFs(Thread):
     def setPFs(self, pfs):
+    	logger.info('Starting, PFs monitored: %s', pfs)
         self.pfs = {}
         for pf in pfs:
             numvfs = getNumVFs(pf)
@@ -57,14 +68,13 @@ class MonitorPFs(Thread):
             state = dev[0].get_attr('IFLA_CARRIER', '')
             self.pfs[pf] = PF(pf, state, numvfs)
 
-        #print self.pfs[pf].numvfs
-
     def run(self):
         while True:
             msg = work_queue.get()
             ifname = msg['attrs'][0][1]
             if ifname in self.pfs.keys():
-                print "Got msg about: " , ifname
+                #print "Got msg about: " , ifname
+		logger.info('Got msg about PF: %s ', ifname)
                 newState = msg.get_attr('IFLA_CARRIER', '')
                 if newState != self.pfs[ifname].state:
                     self.pfs[ifname].state = newState
@@ -83,6 +93,7 @@ def main():
     signal.signal(signal.SIGTERM, handler)
 
     c = Config()
+  
     mpfs = MonitorPFs()
     mpfs.setPFs(c.pfs)
     mpfs.daemon = True
