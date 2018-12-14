@@ -1,0 +1,10 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: infra
+spec:
+  config: '{
+    "type": "ovn-k8s-cni-overlay",
+    "name": "ovn-kubernetes",
+    "network-name": "infra"
+  }'
