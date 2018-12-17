@@ -31,7 +31,7 @@ spec:
         #networks: "GPU_00 GPU_01"
         netgpu1: "{\"subnet\":\"10.10.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
         netgpu2: "{\"subnet\":\"10.10.2.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        infra: "{\"subnet\":\"10.30.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"PV\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
+        infra: "{\"subnet\":\"10.30.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
         #GPU_01: "{\"subnet\":\"10.10.2.1/24\",  \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"l2gateway\" , \"vlan_id\":\"102\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"8eb2769a-9cc0-4f3e-ba74-63f8faf465f7\"}"
         #GPU_01: "{\"pf\":\"enp94s1\", \"vlan_id\":\"300\", \"attr3\":\"barG1\"}"
 
