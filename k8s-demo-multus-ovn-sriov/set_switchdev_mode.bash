@@ -48,5 +48,6 @@ echo $NUM_VFS >  /sys/class/net/$NIC/device/sriov_numvfs
 unbind_vfs 
 switchdev_mode 
 bind_vfs 
+ip link | grep DOWN | grep enp.* | cut -d: -f2 | xargs -I {} ip link set dev {} up
 
 
