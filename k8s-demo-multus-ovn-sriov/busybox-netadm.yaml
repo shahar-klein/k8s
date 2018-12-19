@@ -7,8 +7,7 @@ metadata:
   annotations:
     k8s.v1.cni.cncf.io/networks: '[
             { "name": "netgpu1" },
-            { "name": "netgpu2" },
-            { "name": "infra" }
+            { "name": "netgpu2" }
     ]'
 spec:
   containers:
