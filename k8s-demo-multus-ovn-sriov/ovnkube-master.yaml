@@ -50,7 +50,7 @@ spec:
       - name: ovn-northd
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
-        image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-northd"]
