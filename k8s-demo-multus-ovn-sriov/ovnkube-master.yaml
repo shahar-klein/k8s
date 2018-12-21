@@ -27,10 +27,10 @@ spec:
         beta.kubernetes.io/os: "linux"
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
-        networks: "netgpu1 netgpu2 ovn"
+        networks: "netgpu1 netgpu2"
         netgpu1: "{\"subnet\":\"10.10.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
         netgpu2: "{\"subnet\":\"10.10.2.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        ovn: "{\"subnet\":\"10.244.5.0/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
+        #ovn: "{\"subnet\":\"10.244.5.0/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
 
     spec:
       # Requires fairly broad permissions - ability to read all services and network functions as well
