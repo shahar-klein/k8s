@@ -30,7 +30,7 @@ spec:
         networks: "netgpu1 netgpu2 ovn"
         netgpu1: "{\"subnet\":\"10.10.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
         netgpu2: "{\"subnet\":\"10.10.2.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        ovn: "{\"subnet\":\"10.30.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
+        ovn: "{\"subnet\":\"10.244.5.0/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
 
     spec:
       # Requires fairly broad permissions - ability to read all services and network functions as well
@@ -150,7 +150,8 @@ spec:
       - name: ovnkube-master
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
-        image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-master"]
