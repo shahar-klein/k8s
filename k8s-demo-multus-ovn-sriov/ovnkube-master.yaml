@@ -28,8 +28,9 @@ spec:
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
         networks: "netgpu1 netgpu2"
-        netgpu1: "{\"subnet\":\"10.10.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        netgpu2: "{\"subnet\":\"10.10.2.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
+        #netgpu1: "{\"subnet\":\"10.100.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
+        netgpu1: "{\"subnet\":\"10.100.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
+        netgpu2: "{\"subnet\":\"10.200.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
         #ovn: "{\"subnet\":\"10.244.5.0/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
 
     spec:
@@ -47,13 +48,16 @@ spec:
       # iptables -A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 6642 -j ACCEPT
       # ovs flow for ovn (geneve)
       # /usr/share/openvswitch/scripts/ovs-ctl --protocol=udp --dport=6081 enable-protocol
-      - name: ovn-northd
+      # run-ovn-northd - v3
+      - name: run-ovn-northd
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
         image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
         #imagePullPolicy: "IfNotPresent"
 
-        command: ["/root/ovnkube.sh", "ovn-northd"]
+        command: ["/root/ovnkube.sh", "run-ovn-northd"]
 
         securityContext:
           runAsUser: 0
@@ -101,9 +105,11 @@ spec:
             memory: 300Mi
         env:
         - name: OVN_DAEMONSET_VERSION
-          value: "2"
+          value: "3"
         - name: OVN_MASTER
           value: "true"
+        - name: OVN_LOG_NORTHD
+          value: "-vconsole:info"
         - name: OVN_NORTH
           valueFrom:
             configMapKeyRef:
@@ -146,22 +152,18 @@ spec:
         #     scheme: HTTP
         lifecycle:
       # end of container
-
-      - name: ovnkube-master
-        #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        #image: "docker.io/shaharklein/ovn-kube-u:latest"
-        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+      #
+      # nb-ovsdb - v3
+      - name: nb-ovsdb
         image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
-        #imagePullPolicy: "IfNotPresent"
-
-        command: ["/root/ovnkube.sh", "ovn-master"]
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
+        command: ["/root/ovnkube.sh", "nb-ovsdb"]
 
         securityContext:
           runAsUser: 0
           # Permission could be reduced by selecting an appropriate SELinux policy
           privileged: true
-
-
         volumeMounts:
         - mountPath: /etc/sysconfig/origin-node
           name: host-sysconfig-node
@@ -180,6 +182,8 @@ spec:
           name: host-var-lib-ovs
         - mountPath: /var/lib/openvswitch/
           name: host-var-lib-ovs
+        - mountPath: /var/log/openvswitch/
+          name: host-var-log-ovs
         - mountPath: /var/run/openvswitch/
           name: host-var-run-ovs
        #  readOnly: false
@@ -197,17 +201,16 @@ spec:
         - mountPath: /var/lib/cni/networks/ovn-k8s-cni-overlay
           name: host-var-lib-cni-networks-ovn-kubernetes
 
+
         resources:
           requests:
             cpu: 100m
             memory: 300Mi
         env:
         - name: OVN_DAEMONSET_VERSION
-          value: "2"
-        - name: OVN_MASTER
-          value: "true"
-        - name: OVNKUBE_LOGLEVEL
-          value: "5"
+          value: "3"
+        - name: OVN_LOG_NB
+          value: "-vconsole:info -vfile:info"
         - name: OVN_NORTH
           valueFrom:
             configMapKeyRef:
@@ -250,6 +253,217 @@ spec:
         #     scheme: HTTP
         lifecycle:
       # end of container
+      #
+      # sb-ovsdb - v3
+      - name: sb-ovsdb
+        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
+
+        command: ["/root/ovnkube.sh", "sb-ovsdb"]
+
+        securityContext:
+          runAsUser: 0
+          # Permission could be reduced by selecting an appropriate SELinux policy
+          privileged: true
+
+        volumeMounts:
+        - mountPath: /etc/sysconfig/origin-node
+          name: host-sysconfig-node
+          readOnly: true
+        # Mount the entire run directory for socket access for Docker or CRI-o
+        # TODO: remove
+        - mountPath: /var/run
+          name: host-var-run
+        # Run directories where we need to be able to access sockets
+        - mountPath: /var/run/dbus/
+          name: host-var-run-dbus
+          readOnly: true
+        # ovn db is stored in the pod in /etc/openvswitch
+        # and on the host in /var/lib/openvswitch/
+        - mountPath: /etc/openvswitch/
+          name: host-var-lib-ovs
+        - mountPath: /var/lib/openvswitch/
+          name: host-var-lib-ovs
+        - mountPath: /var/log/openvswitch/
+          name: host-var-log-ovs
+        - mountPath: /var/run/openvswitch/
+          name: host-var-run-ovs
+        #  readOnly: false
+        - mountPath: /var/run/kubernetes/
+          name: host-var-run-kubernetes
+          readOnly: true
+        # We mount our socket here
+        - mountPath: /var/run/ovn-kubernetes
+          name: host-var-run-ovn-kubernetes
+        # CNI related mounts which we take over
+        - mountPath: /host/opt/cni/bin
+          name: host-opt-cni-bin
+        - mountPath: /etc/cni/net.d
+          name: host-etc-cni-netd
+        - mountPath: /var/lib/cni/networks/ovn-k8s-cni-overlay
+          name: host-var-lib-cni-networks-ovn-kubernetes
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        env:
+        - name: OVN_DAEMONSET_VERSION
+          value: "3"
+        - name: OVN_LOG_SB
+          value: "-vconsole:info -vfile:info"
+        - name: OVN_NORTH
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: OvnNorth
+        - name: OVN_SOUTH
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: OvnSouth
+        - name: OVN_NET_CIDR
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: net_cidr
+        - name: OVN_SVC_CIDR
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: svc_cidr
+        - name: K8S_APISERVER
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: k8s_apiserver
+        - name: K8S_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        ports:
+        - name: healthz
+          containerPort: 10255
+        # TODO: Temporarily disabled until we determine how to wait for clean default
+        # config
+        # livenessProbe:
+        #   initialDelaySeconds: 10
+        #   httpGet:
+        #     path: /healthz
+        #     port: 10255
+        #     scheme: HTTP
+        lifecycle:
+      # end of container
+
+
+      - name: ovnkube-master
+        #image: "docker.io/ovnkube/ovn-daemonset:latest"
+        #image: "docker.io/shaharklein/ovn-kube-u:latest"
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-u-venu-multus:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
+        #imagePullPolicy: "IfNotPresent"
+
+        command: ["/root/ovnkube.sh", "ovn-master"]
+
+        securityContext:
+          runAsUser: 0
+          # Permission could be reduced by selecting an appropriate SELinux policy
+          privileged: true
+
+
+        volumeMounts:
+        - mountPath: /etc/sysconfig/origin-node
+          name: host-sysconfig-node
+          readOnly: true
+        # Mount the entire run directory for socket access for Docker or CRI-o
+        # TODO: remove
+        - mountPath: /var/run
+          name: host-var-run
+        # Run directories where we need to be able to access sockets
+        - mountPath: /var/run/dbus/
+          name: host-var-run-dbus
+          readOnly: true
+        # ovn db is stored in the pod in /etc/openvswitch
+        # and on the host in /var/lib/openvswitch/
+        - mountPath: /etc/openvswitch/
+          name: host-var-lib-ovs
+        - mountPath: /var/lib/openvswitch/
+          name: host-var-lib-ovs
+        - mountPath: /var/log/openvswitch/
+          name: host-var-log-ovs
+        - mountPath: /var/run/openvswitch/
+          name: host-var-run-ovs
+        #  readOnly: false
+        - mountPath: /var/run/kubernetes/
+          name: host-var-run-kubernetes
+          readOnly: true
+        # We mount our socket here
+        - mountPath: /var/run/ovn-kubernetes
+          name: host-var-run-ovn-kubernetes
+        # CNI related mounts which we take over
+        - mountPath: /host/opt/cni/bin
+          name: host-opt-cni-bin
+        - mountPath: /etc/cni/net.d
+          name: host-etc-cni-netd
+        - mountPath: /var/lib/cni/networks/ovn-k8s-cni-overlay
+          name: host-var-lib-cni-networks-ovn-kubernetes
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        env:
+        - name: OVN_DAEMONSET_VERSION
+          value: "3"
+        - name: OVN_MASTER
+          value: "true"
+        - name: OVNKUBE_LOGLEVEL
+          value: "5"
+        - name: OVN_NORTH
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: OvnNorth
+        - name: OVN_SOUTH
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: OvnSouth
+        - name: OVN_NET_CIDR
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: net_cidr
+        - name: OVN_SVC_CIDR
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: svc_cidr
+        - name: K8S_APISERVER
+          valueFrom:
+            configMapKeyRef:
+              name: ovn-config
+              key: k8s_apiserver
+        - name: K8S_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        ports:
+        - name: healthz
+          containerPort: 10254
+        # TODO: Temporarily disabled until we determine how to wait for clean default
+        # config
+        # livenessProbe:
+        #   initialDelaySeconds: 10
+        #   httpGet:
+        #     path: /healthz
+        #     port: 10256
+        #     scheme: HTTP
+        lifecycle:
+      # end of container
 
       nodeSelector:
         node-role.kubernetes.io/master: "true"
@@ -273,6 +487,9 @@ spec:
       - name: host-var-lib-ovs
         hostPath:
           path: /var/lib/openvswitch
+      - name: host-var-log-ovs
+        hostPath:
+          path: /var/log/openvswitch
       - name: host-var-run-ovs
         hostPath:
           path: /var/run/openvswitch
@@ -291,3 +508,5 @@ spec:
       - name: host-var-lib-cni-networks-ovn-kubernetes
         hostPath:
           path: /var/lib/cni/networks/ovn-k8s-cni-overlay
+      tolerations:
+      - operator: "Exists"
