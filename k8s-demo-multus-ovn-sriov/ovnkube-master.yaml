@@ -27,11 +27,15 @@ spec:
         beta.kubernetes.io/os: "linux"
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
-        networks: "netgpu1 netgpu2"
+        #networks: "netgpu1 netgpu2 ovn"
+        #networks: "ovn"
+        #networks: "netgpu1 ovn"
         #netgpu1: "{\"subnet\":\"10.100.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        netgpu1: "{\"subnet\":\"10.100.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        netgpu2: "{\"subnet\":\"10.200.1.1/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\"}"
-        #ovn: "{\"subnet\":\"10.244.5.0/24\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\"}"
+        #netgpu1: "{\"subnet\":\"11.100.1.1/16\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"l2localnet\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"no\"}"
+        #netgpu1: "{\"subnet\":\"11.100.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp94s0\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"no\"}"
+        #netgpu2: "{\"subnet\":\"11.200.1.1/16\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\", \"gateway_type\":\"l2localnet\", \"vlan_id\":\"\", \"sriov_pf\":\"enp94s0\", \"gateway_net\":\"outNet1\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"no\"}"
+        #ovn: "{\"subnet\":\"10.244.0.0/16\", \"init_gateways\":\"yes\", \"gateway_itf\":\"\", \"gateway_type\":\"l3gateway\", \"vlan_id\":\"\", \"sriov_pf\":\"\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"yes\"}"
+        # ovn: "{\"subnet\":\"10.244.0.0/16\", \"sriov_pf\":\"enp94s0\" , \"network_allocate\":\"yes\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp94s0\"}"
 
     spec:
       # Requires fairly broad permissions - ability to read all services and network functions as well
@@ -52,9 +56,10 @@ spec:
       - name: run-ovn-northd
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "run-ovn-northd"]
@@ -155,9 +160,10 @@ spec:
       #
       # nb-ovsdb - v3
       - name: nb-ovsdb
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
         command: ["/root/ovnkube.sh", "nb-ovsdb"]
 
         securityContext:
@@ -256,9 +262,10 @@ spec:
       #
       # sb-ovsdb - v3
       - name: sb-ovsdb
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
 
         command: ["/root/ovnkube.sh", "sb-ovsdb"]
 
@@ -361,9 +368,10 @@ spec:
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-master"]
@@ -421,7 +429,7 @@ spec:
         - name: OVN_MASTER
           value: "true"
         - name: OVNKUBE_LOGLEVEL
-          value: "5"
+          value: "2"
         - name: OVN_NORTH
           valueFrom:
             configMapKeyRef:

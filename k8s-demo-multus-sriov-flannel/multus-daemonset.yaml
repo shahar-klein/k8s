@@ -77,18 +77,17 @@ data:
     {
       "name": "multus-cni-network",
       "type": "multus",
-      "LogLevel": "debug",
-      "LogFile": "/var/log/multus.log",
       "delegates": [
         {
-          "type": "ovn-k8s-cni-overlay",
-          "network-name": "ovn",
-          "name": "ovn-kubernetes"
+          "type": "flannel",
+          "name": "flannel.1",
+          "delegate": {
+            "isDefaultGateway": true
+          }
         }
       ],
       "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
     }
-
 # -------------- for openshift.
 # "delegates": [{
 #   "type": "openshift-sdn",
@@ -120,11 +119,7 @@ spec:
       serviceAccountName: multus
       containers:
       - name: kube-multus
-        #image: shaharklein/multus-ovn:latest
-        #image: shaharklein/multus-cni-1:latest
-        image: shaharklein/multus-cni-ann:latest 
-        #image: nfvpe/multus:latest
-        command: ["/entrypoint.sh", "--multus-conf-file=auto"]
+        image: nfvpe/multus:latest
         resources:
           requests:
             cpu: "100m"

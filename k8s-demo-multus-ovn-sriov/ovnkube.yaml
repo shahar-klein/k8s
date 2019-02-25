@@ -38,7 +38,9 @@ spec:
       - name: ovn-controller
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-controller"]
@@ -90,7 +92,7 @@ spec:
         - name: OVN_DAEMONSET_VERSION
           value: "3"
         - name: OVNKUBE_LOGLEVEL
-          value: "4"
+          value: "2"
         - name: OVN_NORTH
           valueFrom:
             configMapKeyRef:
@@ -139,7 +141,9 @@ spec:
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
-        image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
+        #image: "shaharklein/ovn-kube-nv-test1:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-node"]
@@ -191,7 +195,7 @@ spec:
         - name: OVN_DAEMONSET_VERSION
           value: "3"
         - name: OVNKUBE_LOGLEVEL
-          value: "5"
+          value: "2"
         - name: OVN_NORTH
           valueFrom:
             configMapKeyRef:

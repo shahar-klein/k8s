@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ub-pod
+  labels:
+    app: ub-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+            { "name": "sriov-network1" },
+            { "name": "sriov-network2" }
+    ]'
+spec:
+  containers:
+  - image: shaharklein/ub-gen:latest
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: ub-pod
+    securityContext:
+      capabilities:
+        add:
+          - NET_ADMIN

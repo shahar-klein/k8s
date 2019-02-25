@@ -1,0 +1,19 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: sriov-network1
+spec:
+  config: '{
+    "type": "sriov",
+    "if0": "enp94s0",
+    "ipam": {
+            "type": "host-local",
+            "subnet": "10.100.200.0/24",
+            "rangeStart": "10.100.200.100",
+            "rangeEnd": "10.100.200.200",
+            "routes": [
+                    { "dst": "0.0.0.0/0" }
+            ],
+            "gateway": "10.100.200.1"
+    }
+  }'
