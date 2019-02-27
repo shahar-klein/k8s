@@ -1,0 +1,11 @@
+#!/bin/bash
+
+log=/var/tmp/cni-dhcpd.log
+
+while :
+do
+    pkill -9 -e -x dhcp
+    rm -rf /run/cni/dhcp.sock
+    /opt/cni/bin/dhcp daemon >> $log 2>&1
+    sleep 5
+done &
