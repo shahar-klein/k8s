@@ -1,19 +1,19 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: sriov-network2
+  name: sriov-network3
 spec:
   config: '{
     "type": "sriov",
-    "if0": "enp12s0",
+    "if0": "enp132s0",
     "ipam": {
             "type": "host-local",
-            "subnet": "10.110.200.0/24",
-            "rangeStart": "10.110.200.100",
-            "rangeEnd": "10.110.200.200",
+            "subnet": "10.120.200.0/24",
+            "rangeStart": "10.120.200.100",
+            "rangeEnd": "10.120.200.200",
             "routes": [
                     { "dst": "0.0.0.0/0" }
             ],
-            "gateway": "10.110.200.1"
+            "gateway": "10.120.200.1"
     }
   }'

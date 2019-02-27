@@ -7,5 +7,5 @@ data:
   config.json: |
     {
         "mode" : "sriov",
-        "pfNetdevices": [ "enp94s0" ]
+        "pfNetdevices": [ "enp5s0", "enp12s0", "enp132s0", "enp139s0" ]
     }
