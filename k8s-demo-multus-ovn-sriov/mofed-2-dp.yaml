@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ub-mofed-deployment
+  labels:
+    app: ub-mofed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ub-mofed
+  template:
+    metadata:
+      labels:
+        app: ub-mofed
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+                { "name": "netgpu1" }
+        ]'
+    spec:
+      containers:
+      - name: ub-mofed
+        image: shaharklein/ub-mofed:latest
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            rdma/vhca: 1
+        command:
+        - sh
+        - -c
+        - |
+          ls -l /dev/infiniband /sys/class/net
+          sleep 1000000
+

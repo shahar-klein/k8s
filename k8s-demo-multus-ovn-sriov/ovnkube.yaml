@@ -40,7 +40,7 @@ spec:
         #image: "docker.io/shaharklein/ovn-kube-u:latest"
         #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-controller"]
@@ -143,7 +143,7 @@ spec:
         #image: "shaharklein/ovn-kube-u-venu-multus:latest"
         #image: "shaharklein/ovn-kube-sriov-multus-demo:latest"
         #image: "shaharklein/ovn-kube-nv-test1:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test8:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-node"]
