@@ -1,0 +1,47 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: netgpu1
+spec:
+  config: '{
+    "type": "ovn-k8s-cni-overlay",
+    "name": "ovn-kubernetes",
+    "network-name": "netgpu1"
+  }'
+
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: netgpu2
+spec:
+  config: '{
+    "type": "ovn-k8s-cni-overlay",
+    "name": "ovn-kubernetes",
+    "network-name": "netgpu2"
+  }'
+
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: netgpu3
+spec:
+  config: '{
+    "type": "ovn-k8s-cni-overlay",
+    "name": "ovn-kubernetes",
+    "network-name": "netgpu3"
+  }'
+
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: netgpu4
+spec:
+  config: '{
+    "type": "ovn-k8s-cni-overlay",
+    "name": "ovn-kubernetes",
+    "network-name": "netgpu4"
+  }'
