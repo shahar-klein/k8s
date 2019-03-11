@@ -56,7 +56,7 @@ spec:
       # run-ovn-northd - v3
       - name: run-ovn-northd
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "run-ovn-northd"]
@@ -148,7 +148,7 @@ spec:
       # nb-ovsdb - v3
       - name: nb-ovsdb
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "nb-ovsdb"]
@@ -240,7 +240,7 @@ spec:
       # sb-ovsdb - v3
       - name: sb-ovsdb
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "sb-ovsdb"]
@@ -331,7 +331,7 @@ spec:
 
       - name: ovnkube-master
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-master"]

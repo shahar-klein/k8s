@@ -45,7 +45,7 @@ spec:
       # It relies on an up to date node-config.yaml being present.
       - name: ovn-controller
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-controller"]
@@ -133,7 +133,7 @@ spec:
 
       - name: ovn-node
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test11:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-node"]
