@@ -33,13 +33,13 @@ spec:
         beta.kubernetes.io/os: "linux"
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
-        networks: "ovn netgpu1 netgpu2 netgpu3 netgpu4"
+        #      networks: "ovn netgpu1 netgpu2 netgpu3 netgpu4"
         #networks: "ovn"
-        ovn: "{\"subnet\":\"10.244.0.0/16\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp5s0\", \"gateway_type\":\"l3gateway\", \"vlan_id\":\"\", \"sriov_pf\":\"enp5s0\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"yes\"}"
-        netgpu1: "{\"subnet\":\"11.10.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp5s0\", \"network_allocate\":\"no\"}"
-        netgpu2: "{\"subnet\":\"11.20.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp12s0\", \"network_allocate\":\"no\"}"
-        netgpu3: "{\"subnet\":\"11.30.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp132s0\", \"network_allocate\":\"no\"}"
-        netgpu4: "{\"subnet\":\"11.40.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp139s0\", \"network_allocate\":\"no\"}"
+        #ovn: "{\"subnet\":\"10.244.0.0/16\", \"init_gateways\":\"yes\", \"gateway_itf\":\"enp5s0\", \"gateway_type\":\"l3gateway\", \"vlan_id\":\"\", \"sriov_pf\":\"enp5s0\", \"gateway_net\":\"\", \"l2gateway_chassis\":\"\", \"network_allocate\":\"yes\"}"
+        #netgpu1: "{\"subnet\":\"11.10.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp5s0\", \"network_allocate\":\"no\"}"
+        #netgpu2: "{\"subnet\":\"11.20.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp12s0\", \"network_allocate\":\"no\"}"
+        #netgpu3: "{\"subnet\":\"11.30.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp132s0\", \"network_allocate\":\"no\"}"
+        #netgpu4: "{\"subnet\":\"11.40.1.1/16\", \"init_gateways\":\"no\", \"sriov_pf\":\"enp139s0\", \"network_allocate\":\"no\"}"
     spec:
       # Requires fairly broad permissions - ability to read all services and network functions as well
       # as all pods.
@@ -56,7 +56,7 @@ spec:
       # run-ovn-northd - v3
       - name: run-ovn-northd
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test13-crd:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "run-ovn-northd"]
@@ -148,7 +148,7 @@ spec:
       # nb-ovsdb - v3
       - name: nb-ovsdb
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test13-crd:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "nb-ovsdb"]
@@ -240,7 +240,7 @@ spec:
       # sb-ovsdb - v3
       - name: sb-ovsdb
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test13-crd:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "sb-ovsdb"]
@@ -331,7 +331,7 @@ spec:
 
       - name: ovnkube-master
         #image: "docker.io/ovnkube/ovn-daemonset:latest"
-        image: "shaharklein/ovn-kube-nv-2.10-test12:latest"
+        image: "shaharklein/ovn-kube-nv-2.10-test13-crd:latest"
         #imagePullPolicy: "IfNotPresent"
 
         command: ["/root/ovnkube.sh", "ovn-master"]
@@ -390,7 +390,7 @@ spec:
         - name: OVN_MASTER
           value: "true"
         - name: OVNKUBE_LOGLEVEL
-          value: "2"
+          value: "5"
         - name: OVN_NET_CIDR
           valueFrom:
             configMapKeyRef:

@@ -2,14 +2,33 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
+ name: ovn
+spec:
+ config: '{
+   "type": "ovn-k8s-cni-overlay",
+   "name": "ovn-kubernetes",
+   "network-name": "ovn",
+   "network-subnet": "10.244.0.0/16",
+   "gateway-init": true,
+   "gateway-type": "l3gateway",
+   "gateway-itf": "enp5s0",
+   "network-allocate": true,
+   "sriov-dev": "enp5s0"
+ }'
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
   name: netgpu1
 spec:
   config: '{
     "type": "ovn-k8s-cni-overlay",
     "name": "ovn-kubernetes",
-    "network-name": "netgpu1"
-  }'
+    "network-name": "netgpu1",
+    "network-subnet": "11.10.1.1/16",
+    "sriov-dev": "enp5s0"
 
+  }'
 ---
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
@@ -19,7 +38,9 @@ spec:
   config: '{
     "type": "ovn-k8s-cni-overlay",
     "name": "ovn-kubernetes",
-    "network-name": "netgpu2"
+    "network-name": "netgpu2",
+    "network-subnet": "11.20.1.1/16",
+    "sriov-dev": "enp12s0"
   }'
 
 ---
@@ -31,7 +52,9 @@ spec:
   config: '{
     "type": "ovn-k8s-cni-overlay",
     "name": "ovn-kubernetes",
-    "network-name": "netgpu3"
+    "network-name": "netgpu3",
+    "network-subnet": "11.30.1.1/16",
+    "sriov-dev": "enp132s0"
   }'
 
 ---
@@ -43,5 +66,7 @@ spec:
   config: '{
     "type": "ovn-k8s-cni-overlay",
     "name": "ovn-kubernetes",
-    "network-name": "netgpu4"
+    "network-name": "netgpu4",
+    "network-subnet": "11.40.1.1/16",
+    "sriov-dev": "enp139s0"
   }'
